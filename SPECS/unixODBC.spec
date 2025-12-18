@@ -1,7 +1,7 @@
 Summary: A complete ODBC driver manager for Linux
 Name: unixODBC
 Version: 2.3.7
-Release: 1%{?dist}
+Release: 2%{?dist}
 Group: System Environment/Libraries
 URL: http://www.unixODBC.org/
 # Programs are GPL, libraries are LGPL, except News Server library is GPL.
@@ -13,6 +13,7 @@ Source5: README.dist
 
 Patch8: so-version-bump.patch
 Patch9: keep-typedefs.patch
+Patch10: RHEL-118425.patch
 
 Conflicts: iodbc
 
@@ -39,6 +40,7 @@ ODBC, you need to install this package.
 %setup -q
 %patch8 -p1 -b .soname-bump
 %patch9 -p1
+%patch10 -p1
 
 chmod 0644 Drivers/MiniSQL/*.c
 chmod 0644 Drivers/nn/*.c
@@ -124,6 +126,10 @@ done
 %postun -p /sbin/ldconfig
 
 %changelog
+* Fri Oct 03 2025 RHEL Packaging Agent <jotnar@redhat.com> - 2.3.7-2
+- fix __iptr_as_string() overflows buffer
+- Resolves: RHEL-118425
+
 * Sat Aug 11 2018 Pavel Raiskup <praiskup@redhat.com> - 2.3.7-1
 - update to version 2.3.7
 

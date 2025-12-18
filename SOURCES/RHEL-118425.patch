@@ -1,0 +1,67 @@
+From b4d43c1fc5fb369fb29a5f97868ea12f093375a4 Mon Sep 17 00:00:00 2001
+From: Markus Beth <markus.beth@web.de>
+Date: Thu, 22 Apr 2021 23:14:09 +0200
+Subject: [PATCH] fix __iptr_as_string() overflows buffer
+
+---
+ DriverManager/SQLError.c       | 2 +-
+ DriverManager/SQLErrorW.c      | 2 +-
+ DriverManager/SQLGetDiagRec.c  | 2 +-
+ DriverManager/SQLGetDiagRecW.c | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/DriverManager/SQLError.c b/DriverManager/SQLError.c
+index d4a2a0a..0bbb748 100644
+--- a/DriverManager/SQLError.c
++++ b/DriverManager/SQLError.c
+@@ -311,7 +311,7 @@ SQLRETURN SQLError( SQLHENV environment_handle,
+            SQLSMALLINT *text_length )
+ {
+     SQLRETURN ret;
+-    SQLCHAR s0[ 32 ], s1[ 100 + LOG_MESSAGE_LEN ];
++    SQLCHAR s0[ 48 ], s1[ 100 + LOG_MESSAGE_LEN ];
+     SQLCHAR s2[ 100 + LOG_MESSAGE_LEN ];
+ 
+     DMHENV  environment = NULL;
+diff --git a/DriverManager/SQLErrorW.c b/DriverManager/SQLErrorW.c
+index 16df262..64ea90e 100644
+--- a/DriverManager/SQLErrorW.c
++++ b/DriverManager/SQLErrorW.c
+@@ -279,7 +279,7 @@ SQLRETURN SQLErrorW( SQLHENV environment_handle,
+            SQLSMALLINT *text_length )
+ {
+     SQLRETURN ret;
+-    SQLCHAR s0[ 32 ], s1[ 100 + LOG_MESSAGE_LEN ];
++    SQLCHAR s0[ 48 ], s1[ 100 + LOG_MESSAGE_LEN ];
+     SQLCHAR s2[ 100 + LOG_MESSAGE_LEN ];
+     SQLCHAR s3[ 100 + LOG_MESSAGE_LEN ];
+ 
+diff --git a/DriverManager/SQLGetDiagRec.c b/DriverManager/SQLGetDiagRec.c
+index 6d93ede..0f424c8 100644
+--- a/DriverManager/SQLGetDiagRec.c
++++ b/DriverManager/SQLGetDiagRec.c
+@@ -561,7 +561,7 @@ SQLRETURN SQLGetDiagRec( SQLSMALLINT handle_type,
+         SQLSMALLINT *text_length_ptr )
+ {
+     SQLRETURN ret;
+-    SQLCHAR s0[ 32 ], s1[ 100 + LOG_MESSAGE_LEN ];
++    SQLCHAR s0[ 48 ], s1[ 100 + LOG_MESSAGE_LEN ];
+     SQLCHAR s2[ 100 + LOG_MESSAGE_LEN ];
+ 
+     DMHENV environment = ( DMHENV ) handle;
+diff --git a/DriverManager/SQLGetDiagRecW.c b/DriverManager/SQLGetDiagRecW.c
+index 1640047..7eecc03 100644
+--- a/DriverManager/SQLGetDiagRecW.c
++++ b/DriverManager/SQLGetDiagRecW.c
+@@ -424,7 +424,7 @@ SQLRETURN SQLGetDiagRecW( SQLSMALLINT handle_type,
+         SQLSMALLINT *text_length_ptr )
+ {
+     SQLRETURN ret;
+-    SQLCHAR s0[ 32 ], s1[ 100 + LOG_MESSAGE_LEN ];
++    SQLCHAR s0[ 48 ], s1[ 100 + LOG_MESSAGE_LEN ];
+     SQLCHAR s2[ 100 + LOG_MESSAGE_LEN ];
+     SQLCHAR s3[ 100 + LOG_MESSAGE_LEN ];
+ 
+-- 
+2.47.3
+
