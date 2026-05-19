@@ -1,7 +1,7 @@
 Summary: A complete ODBC driver manager for Linux
 Name: unixODBC
-Version: 2.3.9
-Release: 4%{?dist}
+Version: 2.3.12
+Release: 1%{?dist}
 URL: http://www.unixODBC.org/
 # Programs are GPL, libraries are LGPL, except News Server library is GPL.
 License: GPLv2+ and LGPLv2+
@@ -12,6 +12,7 @@ Source5: README.dist
 
 Patch8: so-version-bump.patch
 Patch9: keep-typedefs.patch
+Patch10: unixODBC-c89.patch
 
 Conflicts: iodbc
 
@@ -38,6 +39,7 @@ ODBC, you need to install this package.
 %setup -q
 %patch8 -p1 -b .soname-bump
 %patch9 -p1
+%patch10 -p1
 
 chmod 0644 Drivers/MiniSQL/*.c
 chmod 0644 Drivers/nn/*.c
@@ -67,7 +69,7 @@ make all
 %install
 make DESTDIR=$RPM_BUILD_ROOT install
 install -m644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}
-%multilib_fix_c_header --file %{_includedir}/unixodbc_conf.h
+%multilib_fix_c_header --file %{_includedir}/unixODBC/unixodbc_conf.h
 
 # add some explanatory documentation
 cp %{SOURCE5} README.dist
@@ -129,6 +131,13 @@ done
 %_libdir/pkgconfig/*.pc
 
 %changelog
+* Mon Oct 13 2025 RHEL Packaging Agent <jotnar@redhat.com> - 2.3.12-1
+- Rebase to version 2.3.12
+- Add unixODBC-c89.patch for GCC 14 compatibility
+- Update so-version-bump.patch for new version
+- Fix multilib_fix_c_header path to match actual header location
+- Resolves: RHEL-94798
+
 * Tue Aug 10 2021 Mohan Boddu <mboddu@redhat.com> - 2.3.9-4
 - Rebuilt for IMA sigs, glibc 2.34, aarch64 flags
   Related: rhbz#1991688
