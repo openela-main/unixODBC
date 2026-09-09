@@ -1,7 +1,7 @@
 Summary: A complete ODBC driver manager for Linux
 Name: unixODBC
 Version: 2.3.12
-Release: 1%{?dist}
+Release: 2%{?dist}
 URL: http://www.unixODBC.org/
 # Programs are GPL, libraries are LGPL, except News Server library is GPL.
 License: GPLv2+ and LGPLv2+
@@ -70,6 +70,7 @@ make all
 make DESTDIR=$RPM_BUILD_ROOT install
 install -m644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}
 %multilib_fix_c_header --file %{_includedir}/unixODBC/unixodbc_conf.h
+%multilib_fix_c_header --file %{_includedir}/unixodbc.h
 
 # add some explanatory documentation
 cp %{SOURCE5} README.dist
@@ -131,6 +132,9 @@ done
 %_libdir/pkgconfig/*.pc
 
 %changelog
+* Mon Jul 20 2026 Michal Schorm <mschorm@redhat.com> - 2.3.12-2
+- Fix multilib conflict for 'unixodbc.h' header
+
 * Mon Oct 13 2025 RHEL Packaging Agent <jotnar@redhat.com> - 2.3.12-1
 - Rebase to version 2.3.12
 - Add unixODBC-c89.patch for GCC 14 compatibility
